@@ -42,23 +42,54 @@ racket2 = Player('racket-removebg-preview.png', 520,200,8,50,150)
 ball = GameSprite('miya.png', 200,200,4,100,110)
 
 
+font.init()
+font1 = font.Font(None, 36)
+font2 = font.Font(None, 50)
+lose1 = font2.render('PLAYER 1 LOH', True, (180, 0,0))
+lose2 = font2.render('PLAYER 2 LOH', True, (180, 0,0))
+
+
+
 
 
 game = True
-fihish = False
+finish = False
 clock = time.Clock()
 FPS = 60
+
+
+speed_x = 3
+speed_y = 3
+
 
 while game:
     for e in event.get():
         if e.type == QUIT:
             game = False
 
-    if not fihish:
+    if not finish:
         window.blit(background,(0,0))
 
         racket1.update_l()
         racket2.update_r()
+
+        ball.rect.x += speed_x
+        ball.rect.y += speed_y
+
+        if sprite.collide_rect(racket1, ball) or sprite.collide_rect(racket2, ball):
+            speed_x *= -1
+
+        if ball.rect.y > win_h - 50 or ball.rect.y < 0:
+            speed_y *= -1
+
+        if ball.rect.x < 0:
+            finish = True
+            window.blit(lose1, (200,200))
+
+        if ball.rect.x > 550:
+            finish = True
+            window.blit(lose2, (200,200))
+
 
         racket1.reset()
         racket2.reset()
