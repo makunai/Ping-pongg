@@ -47,9 +47,13 @@ font1 = font.Font(None, 36)
 font2 = font.Font(None, 50)
 lose1 = font2.render('PLAYER 1 LOH', True, (180, 0,0))
 lose2 = font2.render('PLAYER 2 LOH', True, (180, 0,0))
+win1 = font2.render('PLAYER 1 WIN', True, (180, 0,0))
+win2 = font2.render('PLAYER 2 WIN', True, (180, 0,0))
 
 
 
+score1 = 0
+score2 = 0
 
 
 game = True
@@ -63,12 +67,18 @@ speed_y = 3
 
 
 while game:
+
     for e in event.get():
         if e.type == QUIT:
             game = False
 
     if not finish:
         window.blit(background,(0,0))
+        text_lose = font1.render('Очки першого гравця: ' + str(score1), 1, (0,0,0))
+        window.blit(text_lose, (10,20))
+        text_winn = font1.render('Очки другого гравця: ' + str(score2), 1, (0,0,0))
+        window.blit(text_winn, (10,50))
+
 
         racket1.update_l()
         racket2.update_r()
@@ -89,6 +99,23 @@ while game:
         if ball.rect.x > 550:
             finish = True
             window.blit(lose2, (200,200))
+
+        if sprite.collide_rect(racket1, ball):
+            score1 += 1
+
+        if sprite.collide_rect(racket2, ball):
+            score2 += 1
+
+        if score1 == 1:
+            finish = True
+            window.blit(win1, (180,250))
+
+        if score2 == 1:
+            finish = True
+            window.blit(win2, (180,250))
+
+        
+
 
 
         racket1.reset()
